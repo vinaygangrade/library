@@ -1,0 +1,54 @@
+{
+	"name": "Copy SQL To BLOB",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data sql query to blob",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": " SELECT h.SalesOrderID, d.salesorderdetailid, h.SalesOrderNumber, h.PurchaseOrderNumber, h.AccountNumber,  h.OrderDate, h.DueDate, h.ShipDate,\n   h.CustomerId, c.firstname + c.lastname AS CustomerName, h.ShipToAddressID, h.BillToAddressID,  d.ProductID, p.Name ProductName, p.ProductNumber, d.UnitPrice, d.LineTotal  \n  FROM [SalesLT].[SalesOrderHeader] h \n  JOIN [SalesLT].[SalesOrderDetail] d  ON h.SalesOrderID=d.SalesOrderId\n  LEFT JOIN [SalesLT].[Customer] c ON c.CustomerID=h.CustomerID\n  LEFT JOIN [SalesLT].Product p ON p.ProductID=d.ProductID",
+						"queryTimeout": "02:00:00",
+						"isolationLevel": "ReadCommitted"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "AzureSqlSource",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

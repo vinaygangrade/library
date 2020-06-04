@@ -1,0 +1,25 @@
+{
+	"name": "AzureSqlDWDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDWLinkedServices",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"DWTableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": {
+				"value": "@dataset().DWTableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
